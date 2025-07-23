@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
+import { useNavigate } from 'react-router';
 
 interface SignUpProps {
   onSignUp: (email: string, password: string) => void;
@@ -13,6 +14,7 @@ export const SignUp: React.FC<SignUpProps> = ({ onSignUp, error }) => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [localError, setLocalError] = useState<string | null>(null);
+  const navigate = useNavigate()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -24,6 +26,7 @@ export const SignUp: React.FC<SignUpProps> = ({ onSignUp, error }) => {
     setSubmitting(true);
     await onSignUp(email, password);
     setSubmitting(false);
+    if (!error) navigate("/");
   };
 
   return (

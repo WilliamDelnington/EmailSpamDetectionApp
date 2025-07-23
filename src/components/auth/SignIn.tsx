@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
+import { useNavigate } from 'react-router';
 
 interface SignInProps {
   onSignIn: (email: string, password: string) => void;
@@ -11,12 +12,14 @@ export const SignIn: React.FC<SignInProps> = ({ onSignIn, error }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  const navigate = useNavigate()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
     await onSignIn(email, password);
     setSubmitting(false);
+    if (!error) navigate("/");
   };
 
   return (

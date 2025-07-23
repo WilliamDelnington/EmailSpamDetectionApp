@@ -5,6 +5,7 @@ import { SignIn } from './components/auth/SignIn';
 import { AuthProvider, useAuth } from './hooks/useAuth';
 import { SignUp } from './components/auth/SignUp';
 import { ForgotPassword } from './components/auth/ForgotPassword';
+import { UpdateProfile } from './components/auth/UpdateProfile';
 
 function App() {
   const { 
@@ -22,6 +23,7 @@ function App() {
           <Route path="/signIn" element={<SignIn onSignIn={emailAndPasswordSignIn} error={error}/>}/>
           <Route path="/signUp" element={<SignUp onSignUp={emailAndPasswordSignUp} error={error}/>}/>
           <Route path="/forgot-password" element={<ForgotPassword onSendReset={sendPasswordReset} error={error} />}/>
+          <Route path='/update-profile' element={<UpdateProfile />}/>
         </Routes>
       </AuthProvider>
     </BrowserRouter>

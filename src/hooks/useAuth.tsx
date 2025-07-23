@@ -12,6 +12,7 @@ import {
     GoogleAuthProvider,
     updateEmail,
     updatePassword,
+    updateProfile,
     deleteUser
 } from "firebase/auth";
 import { auth } from "../SDKs/firebase"; // adjust the path as needed
@@ -161,6 +162,20 @@ function useAuthHook() {
   }
   }
 
+  const profileUpdate = async (newDisplayName: string = "", newPhotoURL: string = "") => {
+    try {
+        if ((newDisplayName == "" && newPhotoURL == "") || user == null) {
+            return
+        }
+        await updateProfile(user, {displayName: newDisplayName, photoURL: newPhotoURL})
+    } catch (err) {
+        setError(
+          typeof err === "object" && err && "message" in err
+          ? String ((err as any).message)
+          : String(err)
+      );
+  }}
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
       setUser(firebaseUser);
@@ -182,6 +197,7 @@ function useAuthHook() {
     userDeletion,
     emailUpdate,
     passwordUpdate,
+    profileUpdate,
     error
     }
 }

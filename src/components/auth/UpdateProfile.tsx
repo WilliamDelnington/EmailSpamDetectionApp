@@ -1,24 +1,37 @@
 import React, { useState } from 'react';
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
+import { useAuth } from '../../hooks/useAuth';
 
-interface UpdateProfileProps {
-  onUpdate: (data: { displayName: string; email: string; password: string }) => Promise<void>;
-  error?: string;
-  success?: string;
-  initialDisplayName?: string;
-  initialEmail?: string;
-}
-
-export const UpdateProfile: React.FC<UpdateProfileProps> = ({ onUpdate, error, success, initialDisplayName = '', initialEmail = '' }) => {
-  const [displayName, setDisplayName] = useState(initialDisplayName);
-  const [email, setEmail] = useState(initialEmail);
+export const UpdateProfile: React.FC = () => {
+  const [displayName, setDisplayName] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  const [success, setSuccess] = useState("");
+  const { user, profileUpdate, emailUpdate, passwordUpdate, error } = useAuth()
+
+  async function onUpdate({ displayName, email, password }: {displayName: string; email: string, password: string}) {
+    if (displayName && user && displayName !== user.displayName) {
+      await profileUpdate(displayName)
+    }
+
+    if (email && user && email !== user.email) {
+      await emailUpdate(email)
+    }
+
+    if (password) {
+      await passwordUpdate(password)
+    }
+
+    if (error !== "") setSuccess("Successfully update profile")
+    else setSuccess("")
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
+
     await onUpdate({ displayName, email, password });
     setSubmitting(false);
   };
